@@ -7,7 +7,7 @@ update() {
   git pull
   git submodule update --init --recursive
   install_rocks
-}
+} 
 
 # Will install luarocks on THIS_DIR/.luarocks
 install_luarocks() {
