@@ -1,6 +1,6 @@
 do
 local socket = require("socket")
-local cronned = load_from_file('data/isup.lua')
+local cronned = load_from_file('data/IP.lua')
 
 local function save_cron(msg, url, delete)
   local origin = get_receiver(msg)
@@ -82,7 +82,7 @@ local function cron()
     for k,url in pairs(urls) do
       print('Checking', url)
       if not isup(url) then
-        local text = url..' looks DOWN from here. 😱'
+        local text = url..' : Offline'
         send_msg(chan, text, ok_cb, false)
       end
     end
@@ -103,26 +103,26 @@ local function run(msg, matches)
     return save_cron(msg, matches[2])
 
   elseif isup(matches[1]) then
-    return matches[1]..' looks UP from here. 😃'
+    return matches[1]..' : Online'
   else
-    return matches[1]..' looks DOWN from here. 😱'
+    return matches[1]..' : Offline.'
   end
 end
 
 return {
   description = "Check if a website or server is up.",
   usage = {
-    "!isup [host]: Performs a HTTP request or Socket (ip:port) connection",
-    "!isup cron [host]: Every 5mins check if host is up. (Requires privileged user)",
-    "!isup cron delete [host]: Disable checking that host."
+    "ip [host]: Performs a HTTP request or Socket (ip:port) connection",
+    "ip cron [host]: Every 5mins check if host is up. (Requires privileged user)",
+    "ip cron delete [host]: Disable checking that host."
   },
   patterns = {
-    "^!isup (cron delete) (.*)$",
-    "^!isup (cron) (.*)$",
-    "^!isup (.*)$",
-    "^!ping (.*)$",
-    "^!ping (cron delete) (.*)$",
-    "^!ping (cron) (.*)$"
+    "^[Ii]p (cron delete) (.*)$",
+    "^[Ii]p (cron) (.*)$",
+    "^[Ii]p (.*)$",
+    "^[Pp]ing (.*)$",
+    "^[Pp]ing (cron delete) (.*)$",
+    "^[Pp]ing (cron) (.*)$"
   },
   run = run,
   cron = cron
