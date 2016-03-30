@@ -21,7 +21,7 @@ if jdat.reason then
      text = text..'\nنام کلن: '.. jdat.name
      text = text..'\nوضعیت عضو گیری: '.. jdat.type
      text = text..'\nوضعیت وار: '.. jdat.warFrequency
-	 text = text..'\nموقعیت مکانی: '..jdat.locationId
+     text = text..'\nموقعیت مکانی: '..jdat.locationId
      text = text..'\nلول : '.. jdat.clanLevel
      text = text..'\nوار های پیروز: '.. jdat.warWins
      text = text..'\nامتیاز کلن: '.. jdat.clanPoints
@@ -68,8 +68,8 @@ end
 
 return {
    patterns = {
-"^([Cc]lan) (.*)$",
-"^([Cc]lan>) (.*)$",
+"^([Cc]lash) (.*)$",
+"^([Cc]lash>) (.*)$",
    },
    run = run
 }
