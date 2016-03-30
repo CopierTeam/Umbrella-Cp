@@ -11,8 +11,8 @@ sudo apt-get install libreadline-dev libconfig-dev libssl-dev lua5.2 liblua5.2-d
 ```bash
 # After those dependencies, lets install the bot
 cd $HOME
-git clone https://github.com/CopierTeam/umbrella-cp.git
-cd uzzbot
+git clone https://github.com/CopierTeam/Umbrella-Cp.git
+cd Umbrella-Cp
 ./launch.sh install
 ./launch.sh # Will ask you for a phone number & confirmation code.
 ```
@@ -28,3 +28,5 @@ $ sudo cp etc/copier.conf /etc/init/
 $ sudo start copier # To start it
 $ sudo stop copier # To stop it
 ```
+>>این سورس صرفا جهت تست میباشد و مملو از باگ هست
+>>سورس اصلی روز 13 فروردین در همین گیت
