@@ -6,7 +6,7 @@ local function save_cron(msg, url, delete)
   local origin = get_receiver(msg)
   if not cronned[origin] then
     cronned[origin] = {}
-  end
+  end 
   if not delete then
     table.insert(cronned[origin], url)
   else
@@ -16,7 +16,7 @@ local function save_cron(msg, url, delete)
       end
     end
   end
-  serialize_to_file(cronned, 'data/isup.lua')
+  serialize_to_file(cronned, 'data/IP.lua')
   return 'Saved!'
 end
 
