@@ -2,7 +2,7 @@
     local always_try_using_lpeg = true
     local register_global_module_table = false
     local global_module_name = 'json'
-
+ 
     --[==[
 
 David Kolf's JSON module for Lua 5.1/5.2
