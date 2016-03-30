@@ -1,4 +1,4 @@
-local  = 'joke_data.lua'
+local  = load_from_file('joke_data.lua')
 local function run(msg)
 return joke[math.random(#joke)]
 end
