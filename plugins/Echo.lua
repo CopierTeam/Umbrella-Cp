@@ -47,11 +47,13 @@ end
 
 return {
   description = "Simplest plugin ever!",
-  usage = "!echo [whatever]: echoes the msg",
+  usage = {
+  	"!echo [whatever]: echoes the msg",
+  },
   patterns = {
     "^([Ee]cho>) +(.+) (.*)$",
     "^([Ee]cho) +(.+)$",
-    "^([Ee]cho) (tag) +(.+)
+    "^([Ee]cho) (tag) +(.+)$",
     
   },
   run = run
