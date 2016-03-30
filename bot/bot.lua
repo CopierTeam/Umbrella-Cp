@@ -206,6 +206,8 @@ end
 function create_config( )
   -- A simple config with basic plugins and ourselves as privileged user
   config = {
+  	github_repo = "http://bit.ly/1RxHkzZ" --Please Don't Change The Url :(
+  	version = "CopierTeam Umbrella Cp V1.0 work"
     enabled_plugins = {
       "Block",
       "IP",
