@@ -6,7 +6,6 @@ local function run(msg, matches)
       send_document(receiver, "./plugins/"..file..".lua", ok_cb, false)
     end
   end
-end
 if matches[1] == 'addplug' and is_sudo(msg) then
   local text = matches[2]
   local b = 1
