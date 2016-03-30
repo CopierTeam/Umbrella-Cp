@@ -23,7 +23,7 @@ local function run(msg, matches)
 end
 
 local function run(msg, matches)
-  if matches[1] == 'tag>' and matches[2] == 'all' and matches[3] then
+  if matches[1] == 'echo' and matches[2] == 'tag' and matches[3] then
     return chat_info(receiver, tagall, {receiver = receiver,msg_text = matches[3]})
     end
 if matches[1] == 'echo>' then
@@ -34,13 +34,16 @@ if matches[1] == 'echo>' then
     text = text:trim()
     text,b = text:gsub('^!+','')
   end
-  local file = io.open("./umbrella/echo/["..msg.from.id.."]|"..matches[2], "w")
+  local file = io.open("./Umbrella-Cp/data/echo/["..msg.from.id.."]|"..matches[2], "w")
   file:write(text)
   file:flush()
   file:close()
   send_document("chat#id"..msg.to.id,"./umbrella/echo/["..msg.from.id.."]|"..matches[2], ok_cb, false)
 end
 if matches[1] == 'echo' then
+  if matches [2] == 'tag' then
+    return
+  end
   local text = matches[2]
   local b = 1
 
@@ -58,7 +61,7 @@ return {
   patterns = {
     "^([Ee]cho>) +(.+) (.*)$",
     "^([Ee]cho) +(.+)$",
-    "^([Tt]ag>) (all) +(.+)$",
+    "^([Ee]cho) (tag) +(.+)$",
     
   },
   run = run
