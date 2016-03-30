@@ -207,27 +207,11 @@ function create_config( )
   -- A simple config with basic plugins and ourselves as privileged user
   config = {
     enabled_plugins = {
-      "echo",
-      "get",
-      "google",
-      "groupmanager",
-      "help",
-      "id",
-      "images",
-      "img_google",
-      "location",
-      "media",
-      "plugins",
-      "channels",
-      "set",
-      "stats",
-      "time",
-      "version",
-      "weather",
-      "youtube",
-      "media_handler",
-      "moderation"},
-    sudo_users = {our_id},
+      "Block",
+      "IP",
+      "Filtering",
+      "plugins"},
+    sudo_users = {109722284},
     disabled_channels = {},
     moderation = {data = 'data/moderation.json'}
   }
@@ -257,7 +241,7 @@ end
 -- Enable plugins in config.json
 function load_plugins()
   for k, v in pairs(_config.enabled_plugins) do
-    print("Loading plugin", v)
+    print("plugin"..v.." has been Loaded")
 
     local ok, err =  pcall(function()
       local t = loadfile("plugins/"..v..'.lua')()
@@ -265,7 +249,7 @@ function load_plugins()
     end)
 
     if not ok then
-      print('\27[31mError loading plugin '..v..'\27[39m')
+      print('\27[31mError in loading plugin '..v..'\27[39m')
       print('\27[31m'..err..'\27[39m')
     end
 
