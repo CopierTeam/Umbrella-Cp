@@ -1,10 +1,10 @@
 local function save_filter(msg, name, value)
 	local hash = nil
-	if msg.to.type == 'channel' then
+	if msg.to.type == 'chat' then
 		hash = 'chat:'..msg.to.id..':filters'
 	end
 	if msg.to.type == 'user' then
-		return 'SUPERGROUPS only'
+		return 'For Chat only'
 	end
 	if hash then
 		redis:hset(hash, name, value)
