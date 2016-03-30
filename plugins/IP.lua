@@ -1,6 +1,6 @@
 do
 local socket = require("socket")
-local cronned = load_from_file('data/IP.lua')
+local cronned = load_from_file('data_pro/IP/IP.lua')
 
 local function save_cron(msg, url, delete)
   local origin = get_receiver(msg)
@@ -16,7 +16,7 @@ local function save_cron(msg, url, delete)
       end
     end
   end
-  serialize_to_file(cronned, 'data/IP.lua')
+  serialize_to_file(cronned, 'data_pro/IP/IP.lua')
   return 'Saved!'
 end
 
