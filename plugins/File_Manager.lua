@@ -1,9 +1,9 @@
 local function run(msg, matches)
-  if matches[1] == "send" then
-    local file = matches[2]
-    if is_sudo(msg) then
+  if matches[1] == "send" and is_admin(msg) then
+    local file = matches[3]
+    local fulder = matches[2]
       local receiver = get_receiver(msg)
-      send_document(receiver, "./plugins/"..file..".lua", ok_cb, false)
+      send_document(receiver, "./fulder/"..file..".lua", ok_cb, false)
     end
   end
 if matches[1] == 'addplug' and is_sudo(msg) then
@@ -22,7 +22,7 @@ if matches[1] == 'addplug' and is_sudo(msg) then
   end
   return {
   patterns = {
-  "^([Ss]end) (.*)$",
+  "^([Ss]end) (.*)/(.*)$",
   "^([Aa]ddplug)(.+) (.*) (.*)$"
   },
   run = run
