@@ -408,7 +408,7 @@ function _send_audio(receiver, file_path, cb_function, cb_extra)
 end
 
 function send_audio_from_url(receiver, url, cb_function, cb_extra)
-local file = download_to_file(url,'voice.ogg')
+local file = download_to_file(url,'Umbrella_TTS.mp3')
         local cb_extra = {file_path=file}
         local mime_type = mimetype.get_content_type_no_sub(ext)
     _send_audio(receiver, file, rmtmp_cb, cb_extra)
