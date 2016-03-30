@@ -397,6 +397,30 @@ function send_document_from_url(receiver, url, cb_function, cb_extra)
   _send_document(receiver, file_path, cb_function, cb_extra)
 end
 
+function _send_audio(receiver, file_path, cb_function, cb_extra)
+  local cb_extra = {
+    file_path = file_path,
+    cb_function = cb_function or ok_cb,
+    cb_extra = cb_extra or false
+  }
+  -- Call to remove with optional callback
+  send_audio(receiver, file_path, rmtmp_cb, cb_extra)
+end
+
+function send_audio_from_url(receiver, url, cb_function, cb_extra)
+local file = download_to_file(url,'voice.ogg')
+        local cb_extra = {file_path=file}
+        local mime_type = mimetype.get_content_type_no_sub(ext)
+    _send_audio(receiver, file, rmtmp_cb, cb_extra)
+end
+
+function send_sticker_from_url(receiver, url, cb_function, cb_extra)
+local file = download_to_file(url,'sticker.webp')
+        local cb_extra = {file_path=file}
+        local mime_type = mimetype.get_content_type_no_sub(ext)
+    _send_document(receiver, file, rmtmp_cb, cb_extra)
+end
+
 -- Parameters in ?a=1&b=2 style
 function format_http_params(params, is_get)
   local str = ''
