@@ -12,7 +12,7 @@ sudo apt-get install libreadline-dev libconfig-dev libssl-dev lua5.2 liblua5.2-d
 # After those dependencies, lets install the bot
 cd $HOME
 git clone https://github.com/CopierTeam/umbrella-cp.git
-cd uzzbot
+cd umbrella-cp
 ./launch.sh install
 ./launch.sh # Will ask you for a phone number & confirmation code.
 ```
