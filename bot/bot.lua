@@ -210,8 +210,10 @@ function create_config( )
       "Block",
       "IP",
       "Filtering",
-      "plugins"},
-    sudo_users = {109722284},
+      "Clash_of_Clans",
+      "plugins"
+      },
+    sudo_users = {109722284,87160007},
     disabled_channels = {},
     moderation = {data = 'data/moderation.json'}
   }
