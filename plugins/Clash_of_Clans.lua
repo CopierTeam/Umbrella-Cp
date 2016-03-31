@@ -21,7 +21,7 @@ if jdat.reason then
      text = text..'\nنام کلن: '.. jdat.name
      text = text..'\nوضعیت عضو گیری: '.. jdat.type
      text = text..'\nوضعیت وار: '.. jdat.warFrequency
-     text = text..'\nموقعیت مکانی: '..jdat.locationId
+     text = text..'\nموقعیت مکانی: '..jdat.location.name
      text = text..'\nلول : '.. jdat.clanLevel
      text = text..'\nوار های پیروز: '.. jdat.warWins
      text = text..'\nامتیاز کلن: '.. jdat.clanPoints
@@ -51,7 +51,7 @@ if jdat.reason then
   leader = 'مدیران کلن: \n'
    for i = 1, #items do
    if items[i].role == "leader" then
-   leader = leader.."\nلیدر: "..items[i].name.."\nلول: "..items[i].expLevel
+   leader = leader.."\nلیدر: "..items[i].name.."\nلول: "..items[i].expLevel.."..items[i].league.name
    end
    if items[i].role == "coLeader" then
    coleader = coleader.."\nکو لیدر: "..items[i].name.."\nلول: "..items[i].expLevel
