@@ -1,1 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <script></script>
+  <title> Help </title>
+</head>
 
+
+<body onload="type_text()" style="background-color: rgb(0, 0, 0); color: rgb(153, 0, 0); background-image: url(&quot&quot;);" alink="#000000" link="#0000cc" vlink="#000066">
+
+<script> alert(" Created By Copier Team ")</script>
+<center><br>
+ <p style="font-family : tahoma ; color:blue ; Background-Color : red" >
+  <marquee behavior="alternate" scrollamount="20" >Commands:</marquee>
+
+<script language="Javascript">
+<!--
+var tl=new Array("!info",
+"Displays general info about the SuperGroup",
+"!admins",
+"Returns SuperGroup admins list",
+"Displays general info about the SuperGroup",
+"!admins",
+"Returns SuperGroup admins list",
+"Displays general info about the SuperGroup",
+"!admins",
+"Returns SuperGroup admins list",
+"Displays general info about the SuperGroup",
+"!admins",
+"Returns SuperGroup admins list",
+"Displays general info about the SuperGroup",
+"!admins",
+"Returns SuperGroup admins list",
+"Displays general info about the SuperGroup",
+"!admins",
+"Returns SuperGroup admins list",
+"Displays general info about the SuperGroup",
+"!admins",
+"Returns SuperGroup admins list",
+"Displays general info about the SuperGroup",
+"!admins",
+"Returns SuperGroup admins list")
+var speed=60;
+var index=0; text_pos=0;
+var str_length=tl[0].length;
+var contents, row;
+function type_text()
+{
+contents='';
+row=Math.max(0,index-20);
+while(row<index)
+contents += tl[row++] + '\r\n';
+document.forms[0].elements[0].value = contents + tl[index].substring(0,text_pos) + "_";
+if(text_pos++==str_length)
+{
+text_pos=0;
+index++;
+if(index!=tl.length)
+{
+str_length=tl[index].length;
+setTimeout("type_text()",1500);
+}
+} else
+setTimeout("type_text()",speed);
+}
+//--
+</script>
+<p align="center"><img alt="" src=""></p>
+<form><textarea style="background-color: rgb(0, 0, 0); color: rgb(0, 255, 0);" name="about" readonly="readonly" rows="18" cols="80" wrap="soft">_</textarea><br>
+</form>
+
+</body></html>
