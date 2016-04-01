@@ -1,4 +1,4 @@
-o
+do
  
 function pairsByKeys(t, f)
       local a = {}
@@ -108,9 +108,7 @@ local function telegram_help()
     text = text..i..'> '..name..'\n'
     end
   end
-  text = text..'\n'..'There are '..i..' plugins help available.'
-  text = text..'\n'..'Write "!help [plugin name]" or "!help [plugin number]" for more info.'
-  text = text..'\n'..'Or "!help all" to show all info.'
+  text = text..'\n'..'__________________________________\n#CopierTeam'
   return text
 end
  
@@ -138,7 +136,7 @@ local function run(msg, matches)
   else
       requester = "user"
   end
-  if matches[1] == "help" then
+  if matches[1] == "helps" then
     return telegram_help()
   elseif matches[1] == "help all" then
     return help_all(requester)
@@ -159,15 +157,15 @@ end
 return {
   description = "Help plugin. Get info from other plugins.  ",
   usage = {
-    "!help: Show list of plugins.",
-    "!help all: Show all commands for every plugin.",
-    "!help [plugin name]: Commands for that plugin.",
-    "!help [number]: Commands for that plugin. Type !help to get the plugin number."
+    "helps: Show list of plugins.",
+    "help all: Show all commands for every plugin.",
+    "helps [plugin name]: Commands for that plugin.",
+    "helps [number]: Commands for that plugin. Type !help to get the plugin number."
   },
   patterns = {
-    "^help$",
+    "^([Hh]elps)$",
     "^help all",
-    "^help (.+)"
+    "^[Hh]elps (.+)"
   },
   run = run
 }
