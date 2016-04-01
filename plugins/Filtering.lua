@@ -16,7 +16,7 @@ local function list_variablesbad(msg)
 
   if hash then
     local names = redis:hkeys(hash)
-    local text = 'لیست کلمات ممنوع:\n______________________________'
+    local text = 'لیست کلمات ممنوع:\n______________________________\n'
     for i=1, #names do
       text = text..'> '..names[i]..'\n'
     end
@@ -72,7 +72,7 @@ function clear_commandsbad(msg, cmd_name)
 end
 
 local function run(msg, matches)
-  if matches[1] == 'filter' and matches[2] == '+' then
+  if matches[1]:lower() == 'filter' and matches[2] == '+' then
   if not is_momod(msg) then
    return 'شما مدیر نیستید'
   end
@@ -81,13 +81,13 @@ local function run(msg, matches)
   local text = addword(msg, name)
   return text
   end
-  if matches[1] == 'filterlist' then
+  if matches[1]:lower() == 'filterlist' then
   return list_variablesbad(msg)
   elseif matches[2] == 'clearbadwords' then
 if not is_momod(msg) then return '_|_' end
   local asd = '1'
     return clear_commandbad(msg, asd)
-  elseif matches[1] == 'filter' and matches[2] == '-' then
+  elseif matches[1]:lower() == 'filter' and matches[2] == '-' then
    if not is_momod(msg) then return '_|_' end
     return clear_commandsbad(msg, matches[3])
   else
