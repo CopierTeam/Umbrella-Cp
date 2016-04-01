@@ -1,3 +1,4 @@
+do
 local function user_print_name(user)
    if user.print_name then
       return user.print_name
@@ -78,7 +79,6 @@ local function run(msg, matches)
    	local chat = get_receiver(msg)
    	chat_info(chat, username_id, {receiver=receiver, qusername=qusername})
    end
-end
 return {
    patterns = {
       "^([Ii]d)$",
@@ -89,3 +89,4 @@ return {
    },
    run = run
 }
+end
