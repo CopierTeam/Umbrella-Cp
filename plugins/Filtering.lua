@@ -91,15 +91,13 @@ if not is_momod(msg) then return '_|_' end
    if not is_momod(msg) then return '_|_' end
     return clear_commandsbad(msg, matches[3])
   else
-    local name = user_print_name(msg.from)
-  
     return list_variables2(msg, matches[1])
   end
 end
 
 return {
   patterns = {
-  "^([Ff]ilter)(.*) (.*)$",
+  "^([Ff]ilter) (.*) (.*)$",
   "^([Ff]ilterlist)$",
 "^(.+)$",
 	   
