@@ -6,7 +6,7 @@ local function run(msg, matches)
   local url = "http://api.screenshotmachine.com/?key=b645b8&size=NMOB&url="..eq
 
   local receiver = get_receiver(msg)
-  send_sticker_from_url(receiver, url, send_title, {receiver, title})
+  send_photo_from_url(receiver, url, send_title, {receiver, title})
 end
 
 return {
