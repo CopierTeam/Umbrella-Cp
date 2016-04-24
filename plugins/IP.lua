@@ -1,131 +1,82 @@
-do
-local socket = require("socket")
-local cronned = load_from_file('data_pro/IP/IP.lua')
-
-local function save_cron(msg, url, delete)
-  local origin = get_receiver(msg)
-  if not cronned[origin] then
-    cronned[origin] = {}
-  end 
-  if not delete then
-    table.insert(cronned[origin], url)
-  else
-    for k,v in pairs(cronned[origin]) do
-      if v == url then
-        table.remove(cronned[origin], k)
-      end
-    end
-  end
-  serialize_to_file(cronned, 'data_pro/IP/IP.lua')
-  return 'Saved!'
-end
-
-local function is_up_socket(ip, port)
-  print('Connect to', ip, port)
-  local c = socket.try(socket.tcp())
-  c:settimeout(3)
-  local conn = c:connect(ip, port)
-  if not conn then
-    return false
-  else
-    c:close()
-    return true
-  end
-end
-
-local function is_up_http(url)
-  -- Parse URL from input, default to http
-  local parsed_url = URL.parse(url,  { scheme = 'http', authority = '' })
-  -- Fix URLs without subdomain not parsed properly
-  if not parsed_url.host and parsed_url.path then
-    parsed_url.host = parsed_url.path
-    parsed_url.path = ""
-  end
-  -- Re-build URL
-  local url = URL.build(parsed_url)
-
-  local protocols = {
-    ["https"] = https,
-    ["http"] = http
-  }
-  local options =  {
-    url = url,
-    redirect = false,
-    method = "GET"
-  }
-  local response = { protocols[parsed_url.scheme].request(options) }
-  local code = tonumber(response[2])
-  if code == nil or code >= 400 then
-    return false
-  end
-  return true
-end
-
-local function isup(url)
-  local pattern = '^(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?):?(%d?%d?%d?%d?%d?)$'
-  local ip,port = string.match(url, pattern)
-  local result = nil
-
-  -- !isup 8.8.8.8:53
-  if ip then
-    port = port or '80'
-    result = is_up_socket(ip, port)
-  else
-    result = is_up_http(url)
-  end
-
-  return result
-end
-
-local function cron()
-  for chan, urls in pairs(cronned) do
-    for k,url in pairs(urls) do
-      print('Checking', url)
-      if not isup(url) then
-        local text = url..' : Offline'
-        send_msg(chan, text, ok_cb, false)
-      end
-    end
-  end
-end
-
 local function run(msg, matches)
-  if matches[1] == 'cron delete' then
-    if not is_sudo(msg) then 
-      return 'This command requires privileged user'
+  if matches[1]:lower() == "config" then
+    local data = http.request("http://ip-api.com/json/"..URL.escape(matches[2]).."?fields=262143")
+    local jdat = JSON.decode(data)
+    if jdat.status == "success" then
+      local text = "مشخصات آی اس پی شخص-دامنه مورد نظر:\n"
+      .."کشور: "..jdat.country.." - "..jdat.countryCode.."\n"
+      .."استان: "..jdat.regionName.."\n"
+      .."شهر: "..jdat.city.."\n"
+      .."زیپ کد: "..jdat.zip.."\n"
+      .."تایم زون: "..jdat.timezone.."\n"
+      .."مختصات جغرافیایی: "..jdat.lat..","..jdat.lon.."\n"
+      .."لینک گوگل مپ:\nhttps://www.google.com/maps/place/"..jdat.lat..","..jdat.lon.."\n"
+      .."شمار موبایل: "..(jdat.mobile or "-------").."\n"
+      .."آی پی پروکسی: "..(jdat.proxy or "-------").."\n"
+      .."آی پی: "..jdat.query.."\n"
+      .."اورگانیزیشن: "..jdat.org.."\n"
+      .."آی اس پی: "..jdat.isp.."\n"
+      .."آی اس: "..jdat.as
+      send_location(get_receiver(msg), jdat.lat, jdat.lon, ok_cb, false)
+      return text
+    else
+      return "مقدار وارد شد صحیح نیست"
     end
-    return save_cron(msg, matches[2], true)
-
-  elseif matches[1] == 'cron' then
-    if not is_sudo(msg) then 
-      return 'This command requires privileged user'
+  elseif matches[1]:lower() == "ping" then
+    if matches[2] == "." then
+      return "64 bytes from 212.33.207.97: icmp_seq=1 ttl=48 time=107 ms"
+    else
+      local cmd = io.popen("ping -c1 "..matches[2]):read('*all')
+      if cmd == nil or cmd == "" or not cmd then
+        return "مقدار وارد شد صحیح نیست"
+      else
+        local char1 = cmd:find('data.')+5
+        local char2 = cmd:find('\n\n')
+        local text = cmd:sub(char1, char2)
+        local text = text:gsub(": ", "\n")
+        return text
+      end
     end
-    return save_cron(msg, matches[2])
-
-  elseif isup(matches[1]) then
-    return matches[1]..' : Online'
-  else
-    return matches[1]..' : Offline.'
+  elseif matches[1]:lower() == "whois" then
+    return io.popen("whois "..matches[2]):read('*all')
+  elseif matches[1]:lower() == "ip" then
+    return "براي مشاهده ي آي پي خود به لينک زير مراجعه کنيد\nhttp://umbrella.shayan-soft.ir/ip"
+  elseif matches[1]:lower() == "getip" then
+    if not matches[2] then
+      return 'آدرس زیر را به شخص مورد نظر بدهید و از او بخواهید وارد آن شود و توکن را با روش مهندسی اجتماعی (گول زدن شخص) از ایشان بگیرید و با یک فاصله با همین دستور وارد کنید تا آی پی وی را ببینید\nhttp://umbrella.shayan-soft.ir/get'
+    else
+      local getip = http.request("http://umbrella.shayan-soft.ir/get/umbrella"..matches[2]..".config")
+      if getip == "not found" then
+        return "توکن وارد شده صحیح نیست"
+      else
+        return "آی پی شخص مورد نظر:\n"..getip
+      end
+    end
   end
 end
 
 return {
-  description = "Check if a website or server is up.",
+  description = "IP and URL Information", 
+  usagehtm = '<tr><td align="center">ip</td><td align="right">لینکی در اختیارتان قرار میدهد که با ورود به آن میتوانید آی پی خود را مشاهده کنید</td></tr>'
+  ..'<tr><td align="center">getip</td><td align="right">لینک ارائه شده را به شخص مورد نظر بدهید و از آن توکنی که سایت به او میدهد را بخواهید. اگر آن توکن را با یک فاصله بعد از همین دستور وارد کنید، آی پی شخص مورد نظر نمایش داده میشد<br>http://umbrella.shayan-soft.ir/get</td></tr>'
+  ..'<tr><td align="center">config آی پی یا لینک</td><td align="right">اطلاعاتی کلی راجع به آن لینک یا آی پی در اختیارتان قرار میدهد. دقت کنید لینک بدون اچ تی تی پی وارد شود</td></tr>'
+  ..'<tr><td align="center">ping  آی پی یا لینک</td><td align="right">از سرور با پورت های مختلف پینگ میگیرد. دقت کنید لینک بدون اچ تی تی پی وارد شود</td></tr>'
+  ..'<tr><td align="center">whois لینک</td><td align="right">یک دامین را بررسی میکند و در صورتی که قبلا به ثبت رسیده باشد، مشخصات ثبت کننده را به اطلاع شما میرسان. دقت کنید لینک بدون اچ تی تی پی وارد شود</td></tr>',
   usage = {
-    "ip [host]: Performs a HTTP request or Socket (ip:port) connection",
-    "ip cron [host]: Every 5mins check if host is up. (Requires privileged user)",
-    "ip cron delete [host]: Disable checking that host."
+    "ip : آي پي شما",
+    "getip : دریافت و ذخیره آی پی دیگران",
+    "getip (token) : نمایش ذخیره شده",
+    "config (ip|url) : مشخصات",
+    "ping (ip|url) : پينگ",
+    "whois (url) : بررسي دامنه",
   },
   patterns = {
-    "^[Ii]p (cron delete) (.*)$",
-    "^[Ii]p (cron) (.*)$",
-    "^[Ii]p (.*)$",
-    "^[Pp]ing (.*)$",
-    "^[Pp]ing (cron delete) (.*)$",
-    "^[Pp]ing (cron) (.*)$"
-  },
-  run = run,
-  cron = cron
+    "^([Ii]p)$",
+    "^([Gg]etip) (.*)$",
+    "^([Gg]etip)$",
+    "^([Cc]onfig) (.*)$",
+    "^([Pp]ing) (.*)$",
+    "^([Ww]hois) (.*)$",
+  }, 
+  run = run
 }
-
-end
