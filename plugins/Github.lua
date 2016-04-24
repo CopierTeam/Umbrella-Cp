@@ -3,8 +3,8 @@ local function run(msg, matches)
     local dat = https.request("https://api.github.com/repos/"..matches[2])
     local jdat = JSON.decode(dat)
     if jdat.message then
-      return "آدرس وارد شده صحیح نیست به این صورت وارد کنید:\ngithub username/project\ngithub shayan-soft/umbrella"
-    end
+      return "آدرس وارد شده صحیح نیست به این صورت وارد کنید:\ngithub username/project\ngithub CoierTeam/Umbrella-Cp"
+      end
     local base = "curl 'https://codeload.github.com/"..matches[2].."/zip/master'"
     local data = io.popen(base):read('*all')
     f = io.open("file/github.zip", "w+")
@@ -15,8 +15,8 @@ local function run(msg, matches)
     local dat = https.request("https://api.github.com/repos/"..matches[2])
     local jdat = JSON.decode(dat)
     if jdat.message then
-      return "آدرس وارد شده صحیح نیست به این صورت وارد کنید:\ngithub username/project\ngithub shayan-soft/umbrella"
-    end
+      return "آدرس وارد شده صحیح نیست به این صورت وارد کنید:\ngithub username/project\ngithub CopierTeam/Umbrella-Cp"
+      end
     local res = https.request(jdat.owner.url)
     local jres = JSON.decode(res)
     send_photo_from_url("chat#id"..msg.to.id, jdat.owner.avatar_url)
