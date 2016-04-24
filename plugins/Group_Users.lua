@@ -8,7 +8,7 @@ local function set_pass(msg, pass, id)
   local name = string.gsub(msg.to.print_name, '_', '')
   if hash then
     redis:hset(hash, pass, id)
-      return send_large_msg("chat#id"..msg.to.id, "🔱 Password of SuperGroup:\n["..name.."] has been set to:‌\n\n "..pass.."\n\nNow user can join in pm by\n!join "..pass.." ⚜", ok_cb, true)
+      return send_large_msg("chat#id"..msg.to.id, "🔱 User of Group:\n["..name.."] has been set to:‌\n\n "..pass.."\n\nNow user can join in pm by\njoin "..pass.." ⚜", ok_cb, true)
   end
 end
 
@@ -55,7 +55,7 @@ local function run(msg, matches)
    local chat_id = msg.to.id
    local pass = redis:hget(hash, chat_id)
    local receiver = get_receiver(msg)
-   send_large_msg(receiver, "Password for SuperGroup:["..msg.to.print_name.."]\n\nPass > "..pass)
+   send_large_msg(receiver, "User for SuperGroup:["..msg.to.print_name.."]\n\n > "..pass)
  end
 end
 
