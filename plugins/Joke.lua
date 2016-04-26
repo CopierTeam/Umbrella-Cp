@@ -1,4 +1,4 @@
-local jocks_file = './data/jokes.lua'
+local jocks_file = 'data/jokes.lua'
 local jocks_table
 
 function read_jocks_file()
@@ -49,9 +49,9 @@ function get_jock(msg)
 end
 
 function run(msg, matches)
-    if string.match(msg.text, "jock$") then
+    if matches[1] == 'oke' then
         return get_jock(msg)
-    elseif string.match(msg.text, "addjock (.+)$") then
+    elseif matches[1] == 'ddjoke' then
         jocks_table = read_jocks_file()
         return save_jock(msg)
     end
@@ -63,8 +63,8 @@ return {
         "jock",
     },
     patterns = {
-        "^[Aa]ddjock (.+)$",
-        "^[Jj]ock$",
+        "^[Aa](ddjock) (.*)$",
+        "^[Jj](ock)$",
     },
     run = run
 }
