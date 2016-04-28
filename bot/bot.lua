@@ -240,6 +240,7 @@ config = {
       "SoS",
       "TTS",
       "Time",
+      "Umbrella-cp",
       "Version",
       "Weather",
       "Web_Shot",
