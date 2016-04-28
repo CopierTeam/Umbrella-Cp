@@ -4,7 +4,7 @@ package.cpath = package.cpath .. ';.luarocks/lib/lua/5.2/?.so'
 
 require("./bot/utils")
 
-VERSION = '0.14.6'
+VERSION = '1.0'
 
 -- This function is called when tg receive a msg
 function on_msg_receive (msg)
@@ -13,14 +13,19 @@ function on_msg_receive (msg)
   end
 
   local receiver = get_receiver(msg)
+  print (receiver)
 
-  -- vardump(msg)
+  --vardump(msg)
   msg = pre_process_service_msg(msg)
   if msg_valid(msg) then
     msg = pre_process_msg(msg)
     if msg then
       match_plugins(msg)
-      mark_read(receiver, ok_cb, false)
+      if redis:get("bot:markread") then
+        if redis:get("bot:markread") == "on" then
+          mark_read(receiver, ok_cb, false)
+        end
+      end
     end
   end
 end
@@ -31,7 +36,6 @@ end
 function on_binlog_replay_end()
   started = true
   postpone (cron_plugins, false, 60*5.0)
-  -- See plugins/isup.lua as an example for cron
 
   _config = load_config()
 
@@ -79,8 +83,9 @@ function msg_valid(msg)
   end
 
   if msg.from.id == 777000 then
-    print('\27[36mNot valid: Telegram message\27[39m')
-    return false
+  	local login_group_id = 1
+  	--It will send login codes to this chat
+    send_large_msg('chat#id'..login_group_id, msg.text)
   end
 
   return true
@@ -131,13 +136,9 @@ local function is_plugin_disabled_on_chat(plugin_name, receiver)
     -- Checks if plugin is disabled on this chat
     for disabled_plugin,disabled in pairs(disabled_chats[receiver]) do
       if disabled_plugin == plugin_name and disabled then
-        if plugins[disabled_plugin].hidden then
-            print('Plugin '..disabled_plugin..' is disabled on this chat')
-        else
-            local warning = 'Plugin '..disabled_plugin..' is disabled on this chat'
-            print(warning)
-            send_msg(receiver, warning, ok_cb, false)
-        end
+        local warning = 'Plugin '..disabled_plugin..' is disabled on this chat'
+        print(warning)
+        send_msg(receiver, warning, ok_cb, false)
         return true
       end
     end
@@ -205,7 +206,7 @@ end
 -- Create a basic config.json file and saves it.
 function create_config( )
   -- A simple config with basic plugins and ourselves as privileged user
-  config = {
+config = {
     enabled_plugins = {
       "Block",
       "IP",
@@ -252,7 +253,7 @@ function create_config( )
     	github_repo = "http://bit.ly/1RxHkzZ" --Please Don't Change The Url :(
   	version = "CopierTeam Umbrella Cp V1.0 work"
   serialize_to_file(config, './data/config.lua')
-  print ('saved config into ./data/config.lua')
+  print('saved config into ./data/config.lua')
 end
 
 function on_our_id (id)
@@ -264,7 +265,7 @@ function on_user_update (user, what)
 end
 
 function on_chat_update (chat, what)
-  --vardump (chat)
+
 end
 
 function on_secret_chat_update (schat, what)
@@ -277,7 +278,7 @@ end
 -- Enable plugins in config.json
 function load_plugins()
   for k, v in pairs(_config.enabled_plugins) do
-    print("plugin"..v.." has been Loaded")
+    print("Loading plugin", v)
 
     local ok, err =  pcall(function()
       local t = loadfile("plugins/"..v..'.lua')()
@@ -285,12 +286,14 @@ function load_plugins()
     end)
 
     if not ok then
-      print('\27[31mError in loading plugin '..v..'\27[39m')
+      print('\27[31mError loading plugin '..v..'\27[39m')
+      print(tostring(io.popen("lua plugins/"..v..".lua"):read('*all')))
       print('\27[31m'..err..'\27[39m')
     end
 
   end
 end
+
 
 -- custom add
 function load_data(filename)
@@ -326,8 +329,8 @@ function cron_plugins()
     end
   end
 
-  -- Called again in 5 mins
-  postpone (cron_plugins, false, 5*60.0)
+  -- Called again in 2 mins
+  postpone (cron_plugins, false, 120)
 end
 
 -- Start and load values
