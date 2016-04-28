@@ -13,6 +13,7 @@ end
 local function view_sura(chat_id, target)
 local viewq = http.request(umbrella_cp.."quran ("..target..").txt")
 viewq = string.gsub(viewq, "@UmbrellaTeam", "@CopierTeam")
+viewq = string.gsub(viewq, "%10 K", " ")
 return viewq
 end
 
