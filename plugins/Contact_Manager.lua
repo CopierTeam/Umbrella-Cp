@@ -70,7 +70,7 @@ local function get_dialog_list_callback(cb_extra, success, result)
 end
 
 local function run(msg, matches)
-if matches[1] == "addcontact" and is_admin(msg) then
+if matches[1]:lower() == "addcontact" and is_admin(msg) then
     phone = matches[2]
     first_name = matches[3]
     last_name = matches[4]
@@ -78,19 +78,19 @@ if matches[1] == "addcontact" and is_admin(msg) then
    return "User With Phone +"..matches[2].." has been added"
 end
 
-if matches[1] == "remcontact" and is_admin(msg) then
+if matches[1]:lower() == "remcontact" and is_admin(msg) then
     del_contact("user#id"..matches[2], ok_cb, false)
     return "User "..matches[2].." has been removed"
 end
 
-if matches[1] == "sendcontact" and is_admin(msg) then
+if matches[1]:lower() == "sendcontact" and is_admin(msg) then
   phone = matches[2]
   first_name = matches[3]
   last_name = matches[4]
   send_contact(get_receiver(msg), phone, first_name, last_name, ok_cb, false)
   end
   
-  if matches[1] == "mycontact" and is_sudo(msg) then
+  if matches[1]:lower() == "mycontact" and is_sudo(msg) then
 	if not msg.from.phone then
 		retrurn "I must Have Your Phone Number!"
     end
@@ -100,17 +100,17 @@ if matches[1] == "sendcontact" and is_admin(msg) then
     send_contact(get_receiver(msg), phone, first_name, last_name, ok_cb, false)
 end
 
-if matches[1] == "contactlist" and is_admin(msg) then
+if matches[1]:lower() == "contactlist" and is_admin(msg) then
  get_contact_list(get_contact_list_callback, {target = msg.from.id})
       return "I've sent contact list with both json and text format to your private"
 end
 
-if matches[1] == "dialoglist" and is_admin(msg) then
+if matches[1]:lower() == "dialoglist" and is_admin(msg) then
     get_dialog_list(get_dialog_list_callback, {target = msg.from.id})
       return "I've sent a group dialog list with both json and text format to your private messages"
       end
 
-if matches[1] == "pv" then
+if matches[1]:lower() == "pv" then
 local text = "Message From @"..(msg.from.username or msg.from.first_name).."\n\nMessage : "..matches[3]
 send_large_msg("user#id"..matches[2], text)
 end
@@ -118,13 +118,13 @@ end
 
 return {
     patterns = {
-    "^(pv) (%d+) (.*)$",
-        "^(addcontact) (.*) (.*) (.*)$",
-        "^(remcontact) (%d+)$",
-        "^(sendcontact) (.*) (.*) (.*)$",
-        "^(mycontact)$",
-        "^(contactlist)$",
-        "^(dialoglist)$",
+    "^([Pp]v) (%d+) (.*)$",
+        "^([Aa]ddcontact) (.*) (.*) (.*)$",
+        "^([Rr]emcontact) (%d+)$",
+        "^([Ss]endcontact) (.*) (.*) (.*)$",
+        "^([Mm]ycontact)$",
+        "^([Cc]ontactlist)$",
+        "^([Dd]ialoglist)$",
     },
     run = run, 
 }
