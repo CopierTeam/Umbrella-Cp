@@ -97,7 +97,7 @@ text , num = abjad(text,num,'ض')
 text , num = abjad(text,num,'ظ')
 text , num = abjad(text,num,'غ')
 if text ~= '' then
-  return 'Just Use Persian'  
+  return 'فقط زبان فارسی پشتیبانی میشود'  
 end
 return 'عدد ابجد کبیر : '..num
     end
@@ -108,3 +108,5 @@ patterns = {
   },
 run = run
   }  
+
+--@CopierTeam--
