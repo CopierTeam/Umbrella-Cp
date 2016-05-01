@@ -152,12 +152,12 @@ end
 
 local function run(msg, matches)
   -- Show the available plugins 
-  if matches[1] == '!plugins' and is_sudo(msg) then --after changed to moderator mode, set only sudo
+  if matches[1] == '/plug' and is_sudo(msg) then --after changed to moderator mode, set only sudo
     return list_all_plugins()
   end
 
   -- Re-enable a plugin for this chat
-  if matches[1] == '+' and matches[3] == 'gp' then
+  if matches[1] == '+' and matches[3] == 'gp' and is_owner(msg) then
     local receiver = get_receiver(msg)
     local plugin = matches[2]
     print("enable "..plugin..' on this chat')
@@ -172,7 +172,7 @@ local function run(msg, matches)
   end
 
   -- Disable a plugin on a chat
-  if matches[1] == '-' and matches[3] == 'gp' then
+  if matches[1] == '-' and matches[3] == 'gp' and is_owner(msg) then
     local plugin = matches[2]
     local receiver = get_receiver(msg)
     print("disable "..plugin..' on this chat')
@@ -208,7 +208,7 @@ return {
           "/plug * : reloads all plugins." },
           },
   patterns = {
-    "^[!/]plugins$",
+    "^(/plug)$",
     "^/plug? (+) ([%w_%.%-]+)$",
     "^/plug? (-) ([%w_%.%-]+)$",
     "^/plug? (+) ([%w_%.%-]+) (gp)",
