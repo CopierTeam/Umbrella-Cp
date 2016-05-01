@@ -3,8 +3,8 @@ local function run(msg)
 	local res = http.request(database.."danestani.db")
 	if string.match(res, '@UmbrellaTeam') then res = string.gsub(res, '@UmbrellaTeam', "")
  end
-	local joke = res:split(",")
-	return joke[math.random(#joke)]
+	local danestani = res:split(",")
+	return danestani[math.random(#danestani)]
 end
 
 return {
