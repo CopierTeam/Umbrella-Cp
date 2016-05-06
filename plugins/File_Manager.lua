@@ -62,7 +62,8 @@ load_video(msg.reply_id, savefile, {msg=msg,name=name})
 load_audio(msg.reply_id, savefile, {msg=msg,name=name})
         return 'Done'
     end
-endif matches[1]:lower() == 'dl' and is_sudo(msg) then
+end
+if matches[1]:lower() == 'dl' and is_sudo(msg) then
 local url = matches[2]
 local file = 'cloud/'matches[3]
 download_to_file(url, file)
