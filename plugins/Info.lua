@@ -1,17 +1,19 @@
-do
+--CODE WILL BE HERE IN NIGHT
 
-function run(msg, matches)
-  return   "نام کامل:  "..(msg.from.print_name or '').."\nنام کوچک: "..(msg.from.first_name or '').."\nنام خانوادگی:  "..(msg.from.last_name or '').."\n\nشماره موبایل: +"..(msg.from.phone or '').."\nیوزرنیم: @"..(msg.from.username or '').."\nآی دی: "..msg.from.id.."\nرابط کاربری: موبایل\nنام گروه: "..msg.to.title.."\nآی دی گروه: 
-"..msg.to.id.."\n#Cper"
-end
+
 return {
-  description = "", 
-  usage = "",
-  patterns = {
-    "^[Ii]nfo$",
-  },
-  run = run
+description = "گرفتن اطلاعت دیگران",
+usage = {
+"Info : گرفتن اطلاعت خود",
+"Info (Username or ID) : گرفتن اطلاعت دیگران",
+"Setrank (username or ID) (rank) : گذاشتن مقام دلخواه برای دیگران",
+
+},
+patterns = {
+   "^([Ii][Nn][Ff][Oo])$",
+   "^([Ii][Nn]Ff][Oo]) (.*)$",
+   "^([Ss][Ee][Tt][Rr][Aa][Nn][Kk] (%d+) (.*)$",
+   "^([Ss][Ee][Tt][Rr][Aa][Nn][Kk] (.*)$"
+},
+run = run
 }
-end
---by Shahabsaf @ShahabHiDDeN
---will be update soon!
