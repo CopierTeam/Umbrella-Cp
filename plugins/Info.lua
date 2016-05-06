@@ -32,8 +32,9 @@ local function res_user_callback(extra, success, result) -- /info <username> fun
       else
 	    text = text..'جایگاه : کاربر (Member) \n\n'
 	 end
+local hash = 'rank:'..extra.chat2..':variables'
+	local value = redis:hget(hash, result.id)
    text = text..'مقام : '..(value or '----')..'\n\n'
-  end
   local uhash = 'user:'..result.id
   local user = redis:hgetall(uhash)
   local um_hash = 'msgs:'..result.id..':'..extra.chat2
@@ -56,9 +57,6 @@ local function action_by_id(extra, success, result)  -- /info <ID> function
     local text = 'نام کامل : '..(result.first_name or '')..' '..(result.last_name or '')..'\n'
                ..'یوزر: '..Username..'\n'
                ..'ایدی کاربری : '..result.id..'\n\n'
-  local hash = 'rank:'..extra.chat2..':variables'
-  local value = redis:hget(hash, result.id)
-  if not value then
 	 if result.id == tonumber(Arian) then
 	   text = text..'جایگاه : مدیر کل ربات (Executive Admin) \n\n'
 	  elseif is_admin2(result.id) then
@@ -70,7 +68,8 @@ local function action_by_id(extra, success, result)  -- /info <ID> function
 	  else
 	   text = text..'مقام : کاربر (Member) \n\n'
 	  end
-   else
+    local hash = 'rank:'..extra.chat2..':variables'
+  local value = redis:hget(hash, result.id)
     text = text..'مقام : '..(value or '----')..'\n\n'
   end
   local uhash = 'user:'..result.id
