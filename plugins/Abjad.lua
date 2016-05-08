@@ -26,7 +26,7 @@ numbers['خ'] = 600
 numbers['ذ'] = 700
 numbers['ض'] = 800
 numbers['ظ'] = 900
-numbers['غ'] = 900
+numbers['غ'] = 1000
 local function convert(text)
     local text = text:gsub('ژ','ز')
     local text = text:gsub('گ','ک')
@@ -38,6 +38,7 @@ local function convert(text)
     local text = text:gsub('ي','ی')
     local text = text:gsub('ة','ه')
     local text = text:gsub('ؤ','و')
+    local text = text:gsub(' ','')
     return text
 end
 local function abjad(text,num,str)
