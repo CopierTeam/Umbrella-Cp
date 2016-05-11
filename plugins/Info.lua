@@ -22,7 +22,7 @@ local function callback_reply(extra, success, result)
 	elseif result.from.username then
 		if string.sub(result.from.username:lower(), -3) == "bot" then
 			userrank = "API Bot"
-			send_document(org_chat_id,"umbrella/stickers/apt.webp", ok_cb, false)
+			send_document(org_chat_id,"umbrella/stickers/api.webp", ok_cb, false)
 		end
 	end
 	--custom rank ------------------------------------------------------------------------------------------------
