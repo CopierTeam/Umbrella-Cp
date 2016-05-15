@@ -242,7 +242,7 @@ config = {
       "Weather",
       "Web_Shot",
       "Welcome",
-      "plugins"
+      "Plugins"
       },
     sudo_users = {122774063},
     disabled_channels = {},
