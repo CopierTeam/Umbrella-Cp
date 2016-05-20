@@ -1,89 +1,45 @@
-do
-function run_bash(str)
-    local cmd = io.popen(str)
-    local result = cmd:read('*all')
-    return result
-end
-local api_key = nil
-local base_api = "https://maps.googleapis.com/maps/api"
-function get_latlong(area)
-  local api      = base_api .. "/geocode/json?"
-  local parameters = "address=".. (URL.escape(area) or "")
-  if api_key ~= nil then
-    parameters = parameters .. "&key="..api_key
+function fsize(file)
+      local cfile = io.open(file,"r")
+      local current = cfile:seek()    
+      local size = cfile:seek("end")   
+      cfile:seek("set", current)       
+      cfile:close()
+      return size/1000
+ end
+local function run(msg, matches)
+  local res = http.request("http://muslimsalat.com/"..URL.escape(matches[2])..".json?key=0c67a5121190c05e9e09d83f3af2cb3a")
+  local jtab = JSON.decode(res)
+  if jtab.country then
+    local gheble = tonumber(jtab.qibla_direction)
+    local url = 'http://muslimsalat.com/qibla_compass/200/'..gheble..'.png'
+    local url2 = "http://www.qiblaway.com/images/compass-arrows/"..gheble..".png"
+    local file = download_to_file(url, 'gheble.webp')
+    if fsize(file) < 1 then
+    file = download_to_file(url2, 'gheble.webp')
+    end
+  local ghebleh = send_document(get_receiver(msg), file, ok_cb, false)
+if not file then
+   ghebleh = ""
+   end
+ local text = "موقعیت مکانی:\n"..jtab.country..", "..jtab.state..", "..(jtab.city or "").." ("..jtab.latitude..","..jtab.longitude..")\n\n"
+    .."اذان صبح: "..jtab.items[1].fajr.."\n"
+    .."طلوع خورشید: "..jtab.items[1].shurooq.."\n"
+    .."اذان ظهر: "..jtab.items[1].dhuhr.."\n"
+    .."نماز عصر: "..jtab.items[1].asr.."\n"
+    .."اذان مغرب: "..jtab.items[1].maghrib.."\n"
+    .."نماز عشا: "..jtab.items[1].isha.."\nقبله:"
+.." (اگر استیکر ارسال نشد یعنی جهت قبله در دیتابیس موجود نیست)"
+  send_large_msg(get_receiver(msg), text, ok_cb, false)
+return ghebleh
+else
+    return "مکان وارد شده صحیح نیست"
   end
-  local res, code = https.request(api..parameters)
-  if code ~=200 then return nil  end
-  local data = json:decode(res)
- 
-  if (data.status == "ZERO_RESULTS") then
-    return nil
-  end
-  if (data.status == "OK") then
-    lat  = data.results[1].geometry.location.lat
-    lng  = data.results[1].geometry.location.lng
-    acc  = data.results[1].geometry.location_type
-    types= data.results[1].types
-    return lat,lng,acc,types
-  end
-end
-function get_staticmap(area)
-  local api        = base_api .. "/staticmap?"
-  local lat,lng,acc,types = get_latlong(area)
-
-  local scale = types[1]
-  if     scale=="locality" then zoom=8
-  elseif scale=="country"  then zoom=4
-  else zoom = 13 end
-    
-  local parameters =
-    "size=600x300" ..
-    "&zoom="  .. zoom ..
-    "&center=" .. URL.escape(area) ..
-    "&markers=color:red"..URL.escape("|"..area)
-
-  if api_key ~=nil and api_key ~= "" then
-    parameters = parameters .. "&key="..api_key
-  end
-  return lat, lng, api..parameters
-end
-
-
-function run(msg, matches)
-  local hash = 'usecommands:'..msg.from.id..':'..msg.to.id
-  redis:incr(hash)
-  local receiver  = get_receiver(msg)
-  local city = matches[1]
-  if matches[1] == 'azan' then
-  city = 'Tehran'
-  end
-  local lat,lng,url  = get_staticmap(city)
-
-  local dumptime = run_bash('date +%s')
-  local code = http.request('http://api.aladhan.com/timings/'..dumptime..'?latitude='..lat..'&longitude='..lng..'&timezonestring=Asia/Tehran&method=7')
-  local jdat = json:decode(code)
-  local data = jdat.data.timings
-  local text = 'اوقات شرعی امروز  '..city
-    text = text..'\nاذان صبح: '..data.Fajr
-    text = text..'\nطلوع آفتاب: '..data.Sunrise
-    text = text..'\nاذان ظهر: '..data.Dhuhr
-    text = text..'\nاذان مغرب: '..data.Maghrib
-  if string.match(text, '0') then text = string.gsub(text, '0', '۰') end
-  if string.match(text, '1') then text = string.gsub(text, '1', '۱') end
-  if string.match(text, '2') then text = string.gsub(text, '2', '۲') end
-  if string.match(text, '3') then text = string.gsub(text, '3', '۳') end
-  if string.match(text, '4') then text = string.gsub(text, '4', '۴') end
-  if string.match(text, '5') then text = string.gsub(text, '5', '۵') end 
-  if string.match(text, '6') then text = string.gsub(text, '6', '۶') end
-  if string.match(text, '7') then text = string.gsub(text, '7', '۷') end
-  if string.match(text, '8') then text = string.gsub(text, '8', '۸') end
-  if string.match(text, '9') then text = string.gsub(text, '9', '۹') end
-  return text
 end
 
 return {
-  patterns = {"^[Aa]zan (.*)$","^([Aa]zan)$"}, 
-  run = run 
-}
-
-end
+  description = "Islamic Times",
+  usagehtm = '<tr><td align="center">azan شهر</td><td align="right">نمایش اوقات شرعی شهرهای ایران. میتوانید نام شهر را لاتین یا فارسی وارد کنید</td></tr>',
+  usage = {"azan (city) : اوقات شرعی"},
+  patterns = {"^([Aa]zan) (.*)$"},
+  run = run,
+}      
