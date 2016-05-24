@@ -24,21 +24,19 @@ do
 
   local function run(msg, matches)
     if is_chat_msg(msg) and is_momod(msg) then
-       if matches[1]:lower() == "nv" then
-         if msg.reply_id then
+         if msg.reply_id and masg.text == 'inv' then
         msgr = get_message(msg.reply_id, action_by_reply, {msg=msg})
       end
       if string.match(matches[2], '^%d+$') then
-        invite_user(msg.to.id, matches[1])
+        invite_user(msg.to.id, matches[2])
       elseif string.match(matches[2], '^@.+$') then
-        msgr = res_user(string.gsub(matches[1], '@', ''), res_user, {msg=msg})
+        msgr = res_user(string.gsub(matches[2], '@', ''), res_user, {msg=msg})
       elseif string.match(matches[2], '.*$') then
-        chat_add_user('chat#id'..msg.to.id, string.gsub(matches[1], ' ', '_'), ok_cb, false)
+        chat_add_user('chat#id'..msg.to.id, string.gsub(matches[2], ' ', '_'), ok_cb, false)
       end
     else
       return 'This is not a chat group!'
     end
-end
 end
 
   return {
@@ -53,7 +51,7 @@ end
       },
     },
     patterns = {
-      '^[Ii](nv)$',
+      '^[Ii]nv$',
       '^[Ii](nv) (.*)$',
       '^[Ii](nv) (%d+)$'
     },
