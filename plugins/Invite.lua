@@ -13,7 +13,7 @@ do
       invite_user(extra.msg.to.id, result.id)
     else
       return send_large_msg('chat#id'..extra.msg.to.id, 'Failed to invite '
-                            ..string.gsub(extra.msg.text, 'inv ', '')
+                            ..string.gsub(extra.msg.text, 'nv ', '')
                             ..' into this group.\nPlease check if username is correct.')
     end
   end
@@ -24,21 +24,22 @@ do
 
   local function run(msg, matches)
     if is_chat_msg(msg) and is_momod(msg) then
-      if msg.reply_id and msg.text == "inv" then
+       if matches[1]:lower() == "nv" then
+         if msg.reply_id then
         msgr = get_message(msg.reply_id, action_by_reply, {msg=msg})
       end
-      if string.match(matches[1], '^%d+$') then
+      if string.match(matches[2], '^%d+$') then
         invite_user(msg.to.id, matches[1])
-      elseif string.match(matches[1], '^@.+$') then
+      elseif string.match(matches[2], '^@.+$') then
         msgr = res_user(string.gsub(matches[1], '@', ''), res_user, {msg=msg})
-      elseif string.match(matches[1], '.*$') then
-        -- This one is tricky. Big chance are, you need an initial interaction with <print_name>.
+      elseif string.match(matches[2], '.*$') then
         chat_add_user('chat#id'..msg.to.id, string.gsub(matches[1], ' ', '_'), ok_cb, false)
       end
     else
       return 'This is not a chat group!'
     end
-  end
+end
+end
 
   return {
     description = 'Invite other user to the chat group.',
@@ -52,9 +53,9 @@ do
       },
     },
     patterns = {
-      '^[Ii]nv$',
-      '^[Ii]nv (.*)$',
-      '^[Ii]nv (%d+)$'
+      '^[Ii](nv)$',
+      '^[Ii](nv) (.*)$',
+      '^[Ii](nv) (%d+)$'
     },
     run = run,
     privileged = true
